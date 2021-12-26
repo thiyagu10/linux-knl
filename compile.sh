@@ -15,6 +15,17 @@ make -j $(nproc)
 file vmlinux
 ls -lh arch/x86/boot/bzImage
 
-qemu-system-x86_64  -nographic -no-reboot -kernel arch/x86/boot/bzImage -initrd vmlinux -append "panic=10 console=ttyS0,115200"
+### Creating initram File System
+mkinitramfs -o initrd.img
+zcat initrd.img | cpio -idmv
+
+### Creating Block Device with 256 MB and mount it on /mnt
+dd if=/dev/zero of=hdadisk.img bs=4096 count=65536
+mkfs.ext4 hdadisk.img
+mount hdadisk.img /mnt -t ext4
+mount -l
+
+### Boot the created linux kernel and initramfs on HDD
+qemu-system-x86_64  -nographic -no-reboot -kernel /opt/bzImage -m 256 -initrd /opt/ramhdd/initrd.img -hdd /opt/ramhdd/hdadisk.img -append "root=/dev/sda panic=10 console=ttyS0,115200"
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
