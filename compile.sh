@@ -17,6 +17,8 @@ ls -lh arch/x86/boot/bzImage
 
 ### Creating initram File System
 mkinitramfs -o initrd.img
+mkdir -p vfs
+cd vfs
 zcat initrd.img | cpio -idmv
 
 ### Creating Block Device with 256 MB and mount it on /mnt
@@ -25,6 +27,12 @@ mkfs.ext4 hdadisk.img
 mount hdadisk.img /mnt -t ext4
 mount -l
 
+cp -rf /opt/ramhdd/vfs/* /mnt
+mkdir /mnt/sys /mnt/proc /mnt/dev
+
+### Create init file in sbin
+
+umount /mnt
 ### Boot the created linux kernel and initramfs on HDD
 qemu-system-x86_64  -nographic -no-reboot -kernel /opt/bzImage -m 256 -initrd /opt/ramhdd/initrd.img -hdd /opt/ramhdd/hdadisk.img -append "root=/dev/sda panic=10 console=ttyS0,115200"
 
