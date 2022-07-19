@@ -75,7 +75,7 @@ cat <<EOF | sudo tee $RFSOPT/initramfs/x86-busybox/etc/timezone
 Asia/Kolkata
 EOF
 
-# Adding TimeZone File
+# Adding OS-RELEASE File
 cat <<EOF | sudo tee $RFSOPT/initramfs/x86-busybox/etc/os-release
 NAME="XNETOS"
 ID=xnetos
