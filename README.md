@@ -2,8 +2,6 @@
 
 Kernel Build Tools/Packages	description
 
-* **fakeroot**
-		- Packaging tool that makes the fake root environment.
 * **build-essential**
 		- Installs development tools such as C, C++, gcc, and g++.
 * **ncurses-dev**
