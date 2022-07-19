@@ -7,8 +7,7 @@ apt install wget htop qemu-system libvirt-clients libvirt-daemon-system virt-man
 
 wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.15.7.tar.xz
 tar -xvf linux-5.15.7.tar.xz
-sudo apt-get install build-essential libncurses-dev bison flex libssl-dev libelf-dev
-sudo apt-get install build-essential linux-source bc kmod cpio flex libncurses5-dev libelf-dev libssl-dev dwarves bison libncurses-dev
+sudo apt-get install build-essential libncurses-dev bison flex libssl-dev libelf-dev linux-source bc kmod cpio libncurses5-dev dwarves 
 cd linux-5.15.7
 make x86_64_defconfig
 make -j $(nproc)
