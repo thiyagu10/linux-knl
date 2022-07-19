@@ -2,7 +2,7 @@
 +              LINUX KERNEL COMPILING                                          +
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-apt install wget htop qemu-system libvirt-clients libvirt-daemon-system virt-manager -y
+sudo apt install wget htop qemu-system libvirt-clients libvirt-daemon-system virt-manager -y
 sudo apt-get install build-essential libncurses-dev bison flex libssl-dev libelf-dev linux-source bc kmod cpio libncurses5-dev dwarves 
 
 wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.15.7.tar.xz
