@@ -3,7 +3,7 @@
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 apt install wget htop qemu-system libvirt-clients libvirt-daemon-system virt-manager -y
-
+apt install wget htop qemu-system libvirt-clients libvirt-daemon-system virt-manager -y
 
 wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.15.7.tar.xz
 tar -xvf linux-5.15.7.tar.xz
