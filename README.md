@@ -1,4 +1,4 @@
-# LxKernel
+# Linux Kernel Compilation
 
 Kernel Build Tools/Packages	description
 
