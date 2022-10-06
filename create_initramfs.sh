@@ -104,5 +104,5 @@ EOF
                 echo "PROBLEM in generating the INITRAMFS"
         fi
 else
-        echo "Input the correct directory to continue the INITRAMFS BUILD. Please rerun the script"
+        echo "Inupt the correct directory to continue the INITRAMFS BUILD> Please rerun the script"
 fi
