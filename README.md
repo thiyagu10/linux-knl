@@ -3,7 +3,7 @@
 Kernel Build Tools/Packages	description
 
 * **build-essential**
-		- Installs development tools such as gcc, and g++ for compiling C and C++
+		- Installs development tools such as gcc, and g++ for compiling C and C++ programs.
 * **ncurses-dev**
 		- Programming library that provides API for the text-based terminals.
 * **xz-utils**
