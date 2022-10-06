@@ -18,3 +18,9 @@ Kernel Build Tools/Packages	description
 		- Issues a shared library for managing ELF files (executable files, core dumps and object code)
 * **bison**
 		- GNU parser generator that converts grammar description to a C program
+
+
+Run the built Kenel and Iniramfs using QEMU Hypervisor---
+
+qemu-system-x86_64  -nographic -no-reboot -kernel vmlinuz-6.0-generic -m 256 -initrd initramfs-6.0-generic \
+					-append "root=/dev/sda panic=10 console=ttyS0,115200 tsc=unstable"
