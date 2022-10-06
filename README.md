@@ -33,5 +33,5 @@ BusyBox			– a software project that provides several stripped-down Unix tools 
 
 **Run the built Kernel and INITRAMFS using KVM/QEMU Hypervisor**
 
-qemu-system-x86_64  -nographic -no-reboot -kernel vmlinuz-6.0-generic -m 256 -initrd initramfs-6.0-generic \
+qemu-system-x86_64  -nographic -no-reboot -kernel vmlinuz-6.0-generic -m 256 -initrd initramfs-6.0-generic \\
 					-append "root=/dev/sda panic=10 console=ttyS0,115200 tsc=unstable"
