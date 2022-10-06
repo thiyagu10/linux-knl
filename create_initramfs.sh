@@ -98,11 +98,11 @@ EOF
         cat initramfs.cpio | gzip > $RFSOPT/obj/initramfs.cpio.gz
         if [ -f "$RFSOPT/obj/initramfs.cpio.gz" ]
         then
-                echo "InitRAMFS is generated and readily available on $RFSOPT/obj/initramfs.cpio.gz"
+                echo "INITRAMFS is generated and readily available on $RFSOPT/obj/initramfs.cpio.gz"
                 cp $RFSOPT/obj/initramfs.cpio.gz        $XNETOS_BUILD/initramfs-${KNL_VER}-generic
         else
                 echo "PROBLEM in generating the INITRAMFS"
         fi
 else
-        echo "Input the correct directory to continue the INITRAMFS BUILD> Please rerun the script"
+        echo "Input the correct directory to continue the INITRAMFS BUILD. Please rerun the script"
 fi
