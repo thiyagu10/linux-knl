@@ -5,9 +5,6 @@
 echo "Enter the Linux Kernel Build Directory [e.g. LXKNL-BUILD] "
 read lxknlblddir
 
-echo "Enter the Linux Kernel Output Directory  [e.g. LXKNL-OUT]"
-read lxkoutdir
-
 echo "Enter the Linux Kernel Version. [e.g. 5.15.55]"
 read lxkversion
 
@@ -15,7 +12,7 @@ echo "Enter the Linux Kernel Local Repo. [e.g. /opt/LXKNL-REPO]"
 read localrepo
 
 KNLBLDDIR=$HOME/$lxknlblddir
-KNLOUTDIR=$KNLBLDDIR/$lxkoutdir
+KNLOUTDIR=$KNLBLDDIR/LXKNL-OUT
 LOCALREPODIR=$localrepo
 KNL_VER=$lxkversion
 MAJOR_VER=$( echo "$KNL_VER" |cut -d\. -f1 )
