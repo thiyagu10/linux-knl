@@ -18,7 +18,7 @@ KNL_VER=$lxkversion
 MAJOR_VER=6
 LNXKNL_URL='https://cdn.kernel.org/pub/linux/kernel/v'$MAJOR_VER'.x/linux-'$KNL_VER'.tar.xz'
 sudo apt update -y
-sudo apt-get install build-essential libncurses-dev libncurses5-dev linux-source libssl-dev libelf-dev bison flex bc kmod cpio dwarves -y
+sudo apt-get install build-essential libncurses5-dev libssl-dev libelf-dev bison flex bc kmod cpio dwarves -y
 sudo apt install wget htop qemu-system libvirt-clients libvirt-daemon-system virt-manager -y
 mkdir -p $KNLBLDDIR
 mkdir -p $KNLOUTDIR
