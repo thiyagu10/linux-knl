@@ -5,7 +5,7 @@
 echo "Enter the Linux Kernel Build Directory [e.g. LXKNL-BUILD] "
 read lxknlblddir
 
-echo "Enter the Linux Kernel Version. [e.g. 5.15.55]"
+echo "Enter the Linux Kernel Version. [e.g. 6.0]"
 read lxkversion
 
 echo "Enter the Linux Kernel Local Repo. [e.g. /opt/LXKNL-REPO]"
@@ -15,7 +15,7 @@ KNLBLDDIR=$HOME/$lxknlblddir
 KNLOUTDIR=$KNLBLDDIR/LXKNL-OUT
 LOCALREPODIR=$localrepo
 KNL_VER=$lxkversion
-MAJOR_VER=$( echo "$KNL_VER" |cut -d\. -f1 )
+MAJOR_VER=6
 LNXKNL_URL='https://cdn.kernel.org/pub/linux/kernel/v'$MAJOR_VER'.x/linux-'$KNL_VER'.tar.xz'
 sudo apt update -y
 sudo apt-get install build-essential libncurses-dev libncurses5-dev linux-source libssl-dev libelf-dev bison flex bc kmod cpio dwarves -y
