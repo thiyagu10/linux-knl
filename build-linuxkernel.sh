@@ -36,8 +36,6 @@ KNL_VER=$lxkversion
 MAJOR_VER=6
 LNXKNL_URL='https://cdn.kernel.org/pub/linux/kernel/v'$MAJOR_VER'.x/linux-'$KNL_VER'.tar.xz'
 echo "Linux Kernel will be downloaded from $LNXKNL_URL"
-#echo "$KNLBLDDIR \t $KNLOUTDIR \t $LOCALREPODIR \t $KNL_VER \t $MAJOR_VER"
-#exit
 sudo apt update -y
 sudo apt-get install build-essential libncurses5-dev libssl-dev libelf-dev bison flex bc kmod cpio dwarves -y
 sudo apt install wget htop qemu-system libvirt-clients libvirt-daemon-system virt-manager -y
