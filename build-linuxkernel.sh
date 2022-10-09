@@ -5,10 +5,10 @@
 helpFunction()
 {
    echo ""
-   echo "Usage: $0 -bdir parameterA -knlver parameterB -repo parameterC"
-   echo -e "\t-bdir Enter the Linux Kernel Build Directory [e.g. LXKNL-BUILD]"
-   echo -e "\t-knlver Enter the Linux Kernel Version. [e.g. 6.0]"
-   echo -e "\t-repo Enter the Linux Kernel Local Repo. [e.g. /opt/LXKNL-REPO]"
+   echo "Usage: $0 -d parameterA -v parameterB -r parameterC"
+   echo -e "\t-d Enter the Linux Kernel Build Directory [e.g. LXKNL-BUILD]"
+   echo -e "\t-v Enter the Linux Kernel Version. [e.g. 6.0]"
+   echo -e "\t-r Enter the Linux Kernel Local Repo. [e.g. /opt/LXKNL-REPO]"
    exit 1 # Exit script after printing help
 }
 
@@ -28,8 +28,6 @@ then
    echo "Some or all of the parameters are empty";
    helpFunction
 fi
-
-# Begin script in case all parameters are correct
 
 KNLBLDDIR=$HOME/$lxknlblddir
 KNLOUTDIR=$KNLBLDDIR/LXKNL-OUT
