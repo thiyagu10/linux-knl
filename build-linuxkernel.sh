@@ -1,6 +1,6 @@
 #!/bin/bash
 #############################################################################################################
-#                               LINUX KERNEL 5.x or 6.x Compile on Ubuntu 20.04                                                                         #
+#                               LINUX KERNEL 5.x or 6.x Compile on Ubuntu 20.04                             
 #############################################################################################################
 helpFunction()
 {
@@ -11,7 +11,6 @@ helpFunction()
    echo -e "\t-r Enter the Linux Kernel Local Repo. [e.g. /opt/LXKNL-REPO]"
    exit 1 # Exit script after printing help
 }
-
 while getopts ":d:v:r:" flags
 do
    case "$flags" in
@@ -21,14 +20,12 @@ do
       ? ) helpFunction ;; # Print helpFunction in case parameter is non-existent
    esac
 done
-
 # Print helpFunction in case parameters are empty
 if [ -z "$lxknlblddir" ] || [ -z "$lxkversion" ] || [ -z "$localrepo" ]
 then
    echo "Some or all of the parameters are empty";
    helpFunction
 fi
-
 KNLBLDDIR=$HOME/$lxknlblddir
 KNLOUTDIR=$KNLBLDDIR/LXKNL-OUT
 LOCALREPODIR=$localrepo
@@ -62,7 +59,6 @@ tar -xvf $KNLBLDDIR/linux-${KNL_VER}.tar.xz
 cd $KNLBLDDIR/linux-${KNL_VER}/
 make x86_64_defconfig
 make -j $(nproc)
-
 # x86_64 Image will be aviable on $KNLBLDDIR/linux-{x.y.z}/arch/x86/boot/bzImage
 cp $KNLBLDDIR/linux-${KNL_VER}/arch/x86/boot/bzImage $KNLOUTDIR/vmlinuz-${KNL_VER}-generic
 cp $KNLBLDDIR/linux-${KNL_VER}/System.map $KNLOUTDIR/System.map-${KNL_VER}-generic
