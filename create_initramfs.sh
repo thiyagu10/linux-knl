@@ -2,107 +2,142 @@
 #                          INITRAMFS - BUSYBOX-1.34.1
 ##########################################################################################
 
-echo "Enter the INITRAMFS Build Directory [e.g. D10-BUILD] "
-read rfsbuilddir
-
-echo "Enter the INITRAMFS Output Directory  [e.g. D10-RFS]"
-read rfsoptdir
-
-echo "Enter the INITRAMFS BusyBOX version. [e.g. 1.34.1]"
-read bboxversion
-
-XNETOS_BUILD=/opt/XNETOS
-KNL_VER=5.15.55
-
-sudo apt-get install libncurses5-dev -y
-if [ -d "$XNETOS_BUILD" ]
+helpFunction()
+{
+   echo ""
+   echo "Usage: $0 -d parameterA -v parameterB -r parameterC"
+   echo -e "\t-d Enter the INITRAMFS Build Directory [e.g. RFS-BUILD]"
+   echo -e "\t-v Enter the BusyBOX Version. [e.g. 1.34.1]"
+   echo -e "\t-r Enter the Local Repo. [e.g. /opt/LXKNL-REPO]"
+   exit 1 # Exit script after printing help
+}
+while getopts ":d:v:r:" flags
+do
+   case "$flags" in
+      d )rfsbuilddir=${OPTARG};;
+      v )bboxversion=${OPTARG};;
+      r )localrepo=${OPTARG};;
+      ? ) helpFunction ;; # Print helpFunction in case parameter is non-existent
+   esac
+done
+# Print helpFunction in case parameters are empty
+if [ -z "$rfsbuilddir" ] || [ -z "$bboxversion" ] || [ -z "$localrepo" ]
 then
-    echo "Directory exist. CONTINUE with this one"
+   echo "Some or all of the parameters are empty";
+   helpFunction
+fi
+
+L17NETOS_BUILD=/opt/l17-netos
+KNL_VER=6.0.2
+RFSBUILD=$HOME/$rfsbuilddir
+RFSOPT=RFS-OUT
+sudo apt-get install libncurses5-dev -y
+
+if [ -d "$L17NETOS_BUILD" ]
+then
+    echo "Directory $L17NETOS_BUILD exist. CONTINUE with this one"
 else
    echo "Creating the XNETOS Directory"
-   mkdir -pv $XNETOS_BUILD
+   mkdir -pv $L17NETOS_BUILD
 fi
-if [ -n "$rfsbuilddir" -a -n "$rfsoptdir" ]
+
+if [ -d "$localrepo" ]
 then
-    RFSBUILD=$HOME/$rfsbuilddir
-    RFSOPT=$RFSBUILD/$rfsoptdir
-    mkdir -p $RFSBUILD
-    cd $RFSBUILD
-    if [ -f "/opt/LXKNL-REPO/busybox-${bboxversion}.tar.bz2" ]
-    then
-        echo "busybox-${bboxversion}.tar.bz2 is found on /opt/LXKNL-REPO. Using it to Local Repo"
-        cp /opt/LXKNL-REPO/busybox-${bboxversion}.tar.bz2 $RFSBUILD
-    else
-        echo "busybox-${bboxversion}.tar.bz2 is not found on /opt/LXKNL-REPO. Downloading it from Cloud Repo: https://busybox.net"
-        wget https://busybox.net/downloads/busybox-${bboxversion}.tar.bz2
-    fi
-    tar -xvf busybox-${bboxversion}.tar.bz2
-    cd busybox-${bboxversion}/
-    mkdir -pv $RFSOPT/obj/busybox-x86
-    make O=$RFSOPT/obj/busybox-x86 defconfig
-    make O=$RFSOPT/obj/busybox-x86 menuconfig
-    cd $RFSOPT/obj/busybox-x86
-    make -j $(nproc)
-    make install
-    mkdir -pv $RFSOPT/initramfs/x86-busybox
-    cd $RFSOPT/initramfs/x86-busybox
-    mkdir -pv {bin,dev,sbin,etc/network,proc,sys/kernel/debug,usr/{bin,sbin},lib,lib64,mnt/root,root,var/{run,log},opt}
-    cp -av $RFSOPT/obj/busybox-x86/_install/*   $RFSOPT/initramfs/x86-busybox
-    cp -av /dev/{null,console,tty,ttyS0,sda1}   $RFSOPT/initramfs/x86-busybox/dev/
+    echo "Directory $localrepo exist. CONTINUE with this one"
+else
+    echo "Creating the Local Repo Directory"
+    mkdir -pv $localrepo
+fi
+
+if [ -d "$rfsbuilddir" ]
+then
+    echo "Directory $rfsbuilddir Exist. Recreating it"
+    rm -rf $RFSBUILD
+    mkdir -pv $RFSBUILD/$RFSOPT
+    echo "Base Dirtectories Created"
+else
+    mkdir -pv $RFSBUILD/$RFSOPT
+    echo "Base Dirtectories Created"
+fi
+# Base Difrectories Created.
+
+cd $RFSBUILD
+if [ -f "$localrepo/busybox-${bboxversion}.tar.bz2" ]
+then
+    echo "busybox-${bboxversion}.tar.bz2 is found on $localrepo. Using it to Local Repo"
+    cp $localrepo/busybox-${bboxversion}.tar.bz2 $RFSBUILD
+else
+    echo "busybox-${bboxversion}.tar.bz2 is not found on /opt/LXKNL-REPO. Downloading it from Cloud Repo: https://busybox.net"
+    wget https://busybox.net/downloads/busybox-${bboxversion}.tar.bz2
+    cp busybox-${bboxversion}.tar.bz2 $localrepo
+fi
+
+tar -xvf busybox-${bboxversion}.tar.bz2
+cd busybox-${bboxversion}/
+mkdir -pv $RFSBUILD/$RFSOPT/busybox-x86
+make O=$RFSBUILD/$RFSOPT/busybox-x86 defconfig
+make O=$RFSBUILD/$RFSOPT/busybox-x86 menuconfig
+
+cd $RFSBUILD/$RFSOPT/busybox-x86
+make -j $(nproc)
+make install
+mkdir -pv $RFSBUILD/$RFSOPT/initramfs/x86-busybox
+cd $RFSBUILD/$RFSOPT/initramfs/x86-busybox
+mkdir -pv {bin,dev,sbin,etc/network,proc,sys/kernel/debug,usr/{bin,sbin},lib,lib64,mnt/root,root,var/{run,log},opt}
+cp -av $RFSBUILD/$RFSOPT/busybox-x86/_install/*   $RFSBUILD/$RFSOPT/initramfs/x86-busybox
+cp -av /dev/{null,console,tty,ttyS0,sda1}   $RFSBUILD/$RFSOPT/initramfs/x86-busybox/dev/
 # Adding Init File
-cat <<EOF | sudo tee $RFSOPT/initramfs/x86-busybox/init
+cat <<EOF | sudo tee $RFSBUILD/$RFSOPT/initramfs/x86-busybox/init
 #! /bin/sh
 mount -t proc none /proc
 mount -t sysfs none /sys
 mount -t debugfs none /sys/kernel/debug
-echo "XNETOS v1.0 is booted succesffully!!!"
+echo "L17NETOS v1.0 is booted succesffully!!!"
 exec /bin/sh
 EOF
-        chmod +x $RFSOPT/initramfs/x86-busybox/init
+chmod +x $RFSBUILD/$RFSOPT/initramfs/x86-busybox/init
 # Adding HOSTNAME File
-cat <<EOF | sudo tee $RFSOPT/initramfs/x86-busybox/etc/hostname
-XNETOS-1.0
+cat <<EOF | sudo tee $RFSBUILD/$RFSOPT/initramfs/x86-busybox/etc/hostname
+L17NETOS-1-0
 EOF
 
 # Adding HOSTS File
-cat <<EOF | sudo tee $RFSOPT/initramfs/x86-busybox/etc/hosts
+cat <<EOF | sudo tee $RFSBUILD/$RFSOPT/initramfs/x86-busybox/etc/hosts
 127.0.0.1       localhost
-127.0.1.1       XNETOS-1.0
+127.0.1.1       L17NETOS-1-0
 EOF
 
 # Adding Network Interfaces File
-cat <<EOF | sudo tee $RFSOPT/initramfs/x86-busybox/etc/network/interfaces
+cat <<EOF | sudo tee $RFSBUILD/$RFSOPT/initramfs/x86-busybox/etc/network/interfaces
 auto eth0
 iface eth0 inet dhcp
 EOF
 
 # Adding TimeZone File
-cat <<EOF | sudo tee $RFSOPT/initramfs/x86-busybox/etc/timezone
+cat <<EOF | sudo tee $RFSBUILD/$RFSOPT/initramfs/x86-busybox/etc/timezone
 Asia/Kolkata
 EOF
 
 # Adding TimeZone File
-cat <<EOF | sudo tee $RFSOPT/initramfs/x86-busybox/etc/os-release
-NAME="XNETOS"
-ID=xnetos
+cat <<EOF | sudo tee $RFSBUILD/$RFSOPT/initramfs/x86-busybox/etc/os-release
+NAME="L17NETOS"
+ID=l17netos
 VERSION_ID=1.0
-PRETTY_NAME="XNETOS v1.0"
-HOME_URL="https://www.xnetworks.com/xnetos"
-BUG_REPORT_URL="https://www.xnetworks.com/xnetos/bugs"
-PRIVACY_POLICY_URL="https://www.xnetworks.com/xnetos/legel/terms-and-conditions/privacy-policy"
+PRETTY_NAME="L17NETOS v1.0"
+HOME_URL="https://www.b35networks.com/l17netos"
+BUG_REPORT_URL="https://www.b35networks.com/l17netos/bugs"
+PRIVACY_POLICY_URL="https://www.b85networks.com/xnetos/legel/terms-and-conditions/privacy-policy"
 VERSION_CODENAME=0x00000B85
 EOF
-        cd $RFSOPT/initramfs/x86-busybox/
-        find . | cpio -H newc -o > ../initramfs.cpio
-        cd ..
-        cat initramfs.cpio | gzip > $RFSOPT/obj/initramfs.cpio.gz
-        if [ -f "$RFSOPT/obj/initramfs.cpio.gz" ]
-        then
-                echo "INITRAMFS is generated and readily available on $RFSOPT/obj/initramfs.cpio.gz"
-                cp $RFSOPT/obj/initramfs.cpio.gz        $XNETOS_BUILD/initramfs-${KNL_VER}-generic
-        else
-                echo "PROBLEM in generating the INITRAMFS"
-        fi
+
+cd $RFSBUILD/$RFSOPT/initramfs/x86-busybox/
+find . | cpio -H newc -o > ../initramfs.cpio
+cd ..
+cat initramfs.cpio | gzip > $RFSBUILD/$RFSOPT/initramfs.cpio.gz
+if [ -f "$RFSBUILD/$RFSOPT/initramfs.cpio.gz" ]
+then
+    echo "INITRAMFS is generated and readily available on $RFSBUILD/$RFSOPT/initramfs.cpio.gz"
+    cp $RFSBUILD/$RFSOPT/initramfs.cpio.gz $L17NETOS_BUILD/initramfs-${KNL_VER}-generic
 else
-        echo "Input the correct directory to continue the INITRAMFS BUILD. Please rerun the script"
+    echo "PROBLEM in generating the INITRAMFS"
 fi
