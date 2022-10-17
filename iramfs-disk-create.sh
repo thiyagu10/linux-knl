@@ -1,5 +1,5 @@
 ##########################################################################################
-#                          INITRAMFS - BUSYBOX-1.34.1
+#                          INITRAMFS - BUSYBOX-1.34.1 and DISK Creation
 ##########################################################################################
 
 helpFunction()
@@ -31,8 +31,10 @@ L17NETOS_BUILD=/opt/l17-netos
 KNL_VER=6.0.2
 RFSBUILD=$HOME/$rfsbuilddir
 RFSOPT=RFS-OUT
-sudo apt-get install libncurses5-dev -y
 
+#echo "$rfsbuilddir      $bboxversion    $localrepo      $L17NETOS_BUILD $KNL_VER        $RFSBUILD       $RFSOPT"
+
+sudo apt-get install libncurses5-dev -y
 if [ -d "$L17NETOS_BUILD" ]
 then
     echo "Directory $L17NETOS_BUILD exist. CONTINUE with this one"
@@ -129,6 +131,9 @@ BUG_REPORT_URL="https://www.b35networks.com/l17netos/bugs"
 PRIVACY_POLICY_URL="https://www.b85networks.com/xnetos/legel/terms-and-conditions/privacy-policy"
 VERSION_CODENAME=0x00000B85
 EOF
+cat <<EOF | sudo tee $RFSBUILD/$RFSOPT/initramfs/x86-busybox/etc/fstab
+LABEL=l17nos-disk01   /        ext4   defaults        0 1
+EOF
 
 cd $RFSBUILD/$RFSOPT/initramfs/x86-busybox/
 find . | cpio -H newc -o > ../initramfs.cpio
@@ -141,3 +146,10 @@ then
 else
     echo "PROBLEM in generating the INITRAMFS"
 fi
+
+sudo dd if=/dev/zero of=$L17NETOS_BUILD/l17nos-disk01.img bs=1M count=512
+sudo mkfs -t ext4 $L17NETOS_BUILD/l17nos-disk01.img
+sudo mkdir -p /mnt/VHD/
+sudo mount -t auto -o loop $L17NETOS_BUILD/l17nos-disk01.img /mnt/VHD/
+cp -rf $RFSBUILD/$RFSOPT/initramfs/x86-busybox/* /mnt/VHD/
+sudo umount /mnt/VHD/
