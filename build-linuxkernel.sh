@@ -27,7 +27,7 @@ then
    helpFunction
 fi
 KNLBLDDIR=$HOME/$lxknlblddir
-KNLOUTDIR=$KNLBLDDIR/LXKNL-OUT
+KNLOUTDIR=/opt/netware-1-x86-64
 LOCALREPODIR=$localrepo
 KNL_VER=$lxkversion
 MAJOR_VER=6
@@ -36,8 +36,8 @@ echo "Linux Kernel will be downloaded from $LNXKNL_URL"
 sudo apt update -y
 sudo apt-get install build-essential libncurses5-dev libssl-dev libelf-dev bison flex bc kmod cpio dwarves -y
 sudo apt install wget htop qemu-system libvirt-clients libvirt-daemon-system virt-manager -y
-mkdir -p $KNLBLDDIR
-mkdir -p $KNLOUTDIR
+mkdir -pv $KNLBLDDIR
+mkdir -pv $KNLOUTDIR
 if [ -d $LOCALREPODIR ]
 then
 	echo "Local Repository directory exist"
