@@ -34,6 +34,7 @@ Kernel Build Tools/Packages	description
 
 * qemu-system-x86_64 -nographic -no-reboot -kernel vmlinuz-6.0.2-generic -m 256 -initrd initramfs-6.0.2-generic -drive file=l17nos-disk01.img,format=raw -append "root=/dev/sda panic=10 console=ttyS0,115200 tsc=unstable"
 
-* virt-filesystems -a /opt/l17-netos/l17netos-1-0_x86-64.qcow2 -l
-* virt-filesystems -a /opt/l17-netos/l17netos-1-0_x86-64.img -l
-* qemu-img info /opt/l17-netos/l17netos-1-0_x86-64.qcow2
+* virt-filesystems -a /opt/netware-1-x86-64/NETWARE-1-0_x86-64.qcow2 -l
+* virt-filesystems -a /opt/netware-1-x86-64/NETWARE-1-0_x86-64.img -l
+* qemu-img info /opt/netware-1-x86-64/NETWARE-1-0_x86-64.qcow2
+* qemu-img convert -f raw -O qcow2 NETWARE-1-0_x86-64.img NETWARE-1-0_x86-64.qcow2
