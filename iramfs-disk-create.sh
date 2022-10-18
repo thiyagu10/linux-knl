@@ -147,9 +147,14 @@ else
     echo "PROBLEM in generating the INITRAMFS"
 fi
 
-sudo dd if=/dev/zero of=$L17NETOS_BUILD/l17nos-disk01.img bs=1M count=512
-sudo mkfs -t ext4 $L17NETOS_BUILD/l17nos-disk01.img
+sudo dd if=/dev/zero of=$L17NETOS_BUILD/l17netos-1-0_x86-64.img bs=1M count=256
+sudo mkfs -t ext4 $L17NETOS_BUILD/l17netos-1-0_x86-64.img
 sudo mkdir -p /mnt/VHD/
-sudo mount -t auto -o loop $L17NETOS_BUILD/l17nos-disk01.img /mnt/VHD/
+sudo mount -t auto -o loop $L17NETOS_BUILD/l17netos-1-0_x86-64.img /mnt/VHD/
+sudo mkdir -p /mnt/VHD/boot
 cp -rf $RFSBUILD/$RFSOPT/initramfs/x86-busybox/* /mnt/VHD/
+cp $L17NETOS_BUILD/initramfs-${KNL_VER}-generic /mnt/VHD/boot/
+cp $L17NETOS_BUILD/vmlinuz-${KNL_VER}-generic /mnt/VHD/boot/
+cp $L17NETOS_BUILD/config-${KNL_VER}-generic /mnt/VHD/boot/
+cp $L17NETOS_BUILD/System.map-${KNL_VER}-generic /mnt/VHD/boot/
 sudo umount /mnt/VHD/
