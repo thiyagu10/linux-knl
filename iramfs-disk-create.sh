@@ -83,19 +83,22 @@ make -j $(nproc)
 make install
 mkdir -pv $RFSBUILD/$RFSOPT/initramfs/x86-busybox
 cd $RFSBUILD/$RFSOPT/initramfs/x86-busybox
-mkdir -pv {bin,dev,sbin,etc/network,proc,sys/kernel/debug,usr/{bin,sbin},lib,lib64,mnt/root,root,var/{run,log},opt}
+mkdir -pv {bin,boot,dev,sbin,etc/network,proc,sys/kernel/debug,usr/{bin,sbin},lib,lib64,mnt/root,root,var/{run,log},opt}
 cp -av $RFSBUILD/$RFSOPT/busybox-x86/_install/*   $RFSBUILD/$RFSOPT/initramfs/x86-busybox
 cp -av /dev/{null,console,tty,ttyS0,sda1}   $RFSBUILD/$RFSOPT/initramfs/x86-busybox/dev/
+
 # Adding Init File
 cat <<EOF | sudo tee $RFSBUILD/$RFSOPT/initramfs/x86-busybox/init
 #! /bin/sh
 mount -t proc none /proc
 mount -t sysfs none /sys
 mount -t debugfs none /sys/kernel/debug
+mount -t ext4 NETWARE-1-0_x86-64 /
 echo "NETWARE v1.0 is booted succesffully!!!"
 exec /bin/sh
 EOF
 chmod +x $RFSBUILD/$RFSOPT/initramfs/x86-busybox/init
+
 # Adding HOSTNAME File
 cat <<EOF | sudo tee $RFSBUILD/$RFSOPT/initramfs/x86-busybox/etc/hostname
 NETWARE-1-0
@@ -124,9 +127,6 @@ NAME="NETWARE"
 ID=NETWARE
 VERSION_ID=1.0
 PRETTY_NAME="NETWARE v1.0"
-HOME_URL="https://www.b35networks.com/NETWARE"
-BUG_REPORT_URL="https://www.b35networks.com/NETWARE/bugs"
-PRIVACY_POLICY_URL="https://www.b85networks.com/xnetos/legel/terms-and-conditions/privacy-policy"
 VERSION_CODENAME=0x00000B85
 EOF
 cat <<EOF | sudo tee $RFSBUILD/$RFSOPT/initramfs/x86-busybox/etc/fstab
