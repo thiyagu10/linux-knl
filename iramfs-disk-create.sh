@@ -1,5 +1,5 @@
 ##########################################################################################
-#                          INITRAMFS - BUSYBOX-1.34.1 and DISK Creation
+#                          INITRAMFS - BUSYBOX-1.34.1 and QCOW2 DISK Creation
 ##########################################################################################
 
 helpFunction()
@@ -27,20 +27,18 @@ then
    helpFunction
 fi
 
-L17NETOS_BUILD=/opt/l17-netos
+NETWARE_BUILD=/opt/netware-1-x86-64
 KNL_VER=6.0.2
 RFSBUILD=$HOME/$rfsbuilddir
 RFSOPT=RFS-OUT
 
-#echo "$rfsbuilddir      $bboxversion    $localrepo      $L17NETOS_BUILD $KNL_VER        $RFSBUILD       $RFSOPT"
-
 sudo apt-get install libncurses5-dev -y
-if [ -d "$L17NETOS_BUILD" ]
+if [ -d "$NETWARE_BUILD" ]
 then
-    echo "Directory $L17NETOS_BUILD exist. CONTINUE with this one"
+    echo "Directory $NETWARE_BUILD exist. CONTINUE with this one"
 else
    echo "Creating the XNETOS Directory"
-   mkdir -pv $L17NETOS_BUILD
+   mkdir -pv $NETWARE_BUILD
 fi
 
 if [ -d "$localrepo" ]
@@ -94,19 +92,19 @@ cat <<EOF | sudo tee $RFSBUILD/$RFSOPT/initramfs/x86-busybox/init
 mount -t proc none /proc
 mount -t sysfs none /sys
 mount -t debugfs none /sys/kernel/debug
-echo "L17NETOS v1.0 is booted succesffully!!!"
+echo "NETWARE v1.0 is booted succesffully!!!"
 exec /bin/sh
 EOF
 chmod +x $RFSBUILD/$RFSOPT/initramfs/x86-busybox/init
 # Adding HOSTNAME File
 cat <<EOF | sudo tee $RFSBUILD/$RFSOPT/initramfs/x86-busybox/etc/hostname
-L17NETOS-1-0
+NETWARE-1-0
 EOF
 
 # Adding HOSTS File
 cat <<EOF | sudo tee $RFSBUILD/$RFSOPT/initramfs/x86-busybox/etc/hosts
 127.0.0.1       localhost
-127.0.1.1       L17NETOS-1-0
+127.0.1.1       NETWARE-1-0
 EOF
 
 # Adding Network Interfaces File
@@ -122,17 +120,17 @@ EOF
 
 # Adding TimeZone File
 cat <<EOF | sudo tee $RFSBUILD/$RFSOPT/initramfs/x86-busybox/etc/os-release
-NAME="L17NETOS"
-ID=l17netos
+NAME="NETWARE"
+ID=NETWARE
 VERSION_ID=1.0
-PRETTY_NAME="L17NETOS v1.0"
-HOME_URL="https://www.b35networks.com/l17netos"
-BUG_REPORT_URL="https://www.b35networks.com/l17netos/bugs"
+PRETTY_NAME="NETWARE v1.0"
+HOME_URL="https://www.b35networks.com/NETWARE"
+BUG_REPORT_URL="https://www.b35networks.com/NETWARE/bugs"
 PRIVACY_POLICY_URL="https://www.b85networks.com/xnetos/legel/terms-and-conditions/privacy-policy"
 VERSION_CODENAME=0x00000B85
 EOF
 cat <<EOF | sudo tee $RFSBUILD/$RFSOPT/initramfs/x86-busybox/etc/fstab
-LABEL=l17nos-disk01   /        ext4   defaults        0 1
+LABEL=NETWARE-1-0_x86-64   /        ext4   defaults        0 1
 EOF
 
 cd $RFSBUILD/$RFSOPT/initramfs/x86-busybox/
@@ -142,19 +140,19 @@ cat initramfs.cpio | gzip > $RFSBUILD/$RFSOPT/initramfs.cpio.gz
 if [ -f "$RFSBUILD/$RFSOPT/initramfs.cpio.gz" ]
 then
     echo "INITRAMFS is generated and readily available on $RFSBUILD/$RFSOPT/initramfs.cpio.gz"
-    cp $RFSBUILD/$RFSOPT/initramfs.cpio.gz $L17NETOS_BUILD/initramfs-${KNL_VER}-generic
+    cp $RFSBUILD/$RFSOPT/initramfs.cpio.gz $NETWARE_BUILD/initramfs-${KNL_VER}-generic
 else
     echo "PROBLEM in generating the INITRAMFS"
 fi
 
-sudo dd if=/dev/zero of=$L17NETOS_BUILD/l17netos-1-0_x86-64.img bs=1M count=256
-sudo mkfs -t ext4 $L17NETOS_BUILD/l17netos-1-0_x86-64.img
+sudo dd if=/dev/zero of=$NETWARE_BUILD/NETWARE-1-0_x86-64.img bs=1M count=256
+sudo mkfs -t ext4 $NETWARE_BUILD/NETWARE-1-0_x86-64.img
 sudo mkdir -p /mnt/VHD/
-sudo mount -t auto -o loop $L17NETOS_BUILD/l17netos-1-0_x86-64.img /mnt/VHD/
+sudo mount -t auto -o loop $NETWARE_BUILD/NETWARE-1-0_x86-64.img /mnt/VHD/
 sudo mkdir -p /mnt/VHD/boot
 cp -rf $RFSBUILD/$RFSOPT/initramfs/x86-busybox/* /mnt/VHD/
-cp $L17NETOS_BUILD/initramfs-${KNL_VER}-generic /mnt/VHD/boot/
-cp $L17NETOS_BUILD/vmlinuz-${KNL_VER}-generic /mnt/VHD/boot/
-cp $L17NETOS_BUILD/config-${KNL_VER}-generic /mnt/VHD/boot/
-cp $L17NETOS_BUILD/System.map-${KNL_VER}-generic /mnt/VHD/boot/
+cp $NETWARE_BUILD/initramfs-${KNL_VER}-generic /mnt/VHD/boot/
+cp $NETWARE_BUILD/vmlinuz-${KNL_VER}-generic /mnt/VHD/boot/
+cp $NETWARE_BUILD/config-${KNL_VER}-generic /mnt/VHD/boot/
+cp $NETWARE_BUILD/System.map-${KNL_VER}-generic /mnt/VHD/boot/
 sudo umount /mnt/VHD/
