@@ -35,7 +35,7 @@ LNXKNL_URL='https://cdn.kernel.org/pub/linux/kernel/v'$MAJOR_VER'.x/linux-'$KNL_
 echo "Linux Kernel will be downloaded from $LNXKNL_URL"
 sudo apt update -y
 sudo apt-get install build-essential libncurses5-dev libssl-dev libelf-dev bison flex bc kmod cpio dwarves -y
-sudo apt install wget htop qemu-system libvirt-clients libvirt-daemon-system virt-manager -y
+sudo apt install wget htop qemu-system libvirt-clients libvirt-daemon-system virt-manager hexdump -y
 mkdir -pv $KNLBLDDIR
 mkdir -pv $KNLOUTDIR
 if [ -d $LOCALREPODIR ]
