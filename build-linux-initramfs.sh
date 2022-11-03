@@ -1,5 +1,5 @@
 ##########################################################################################
-#                          INITRAMFS - BUSYBOX-1.34.1
+#                  Building INITRAMFS virtual file system using BUSYBOX
 ##########################################################################################
 
 export RFSBUILD=$HOME/$IRAMFSBUILD
@@ -39,7 +39,6 @@ cd busybox-${BBOX_VER}/
 mkdir -pv $RFSBUILD/bbox-x86-64
 make O=$RFSBUILD/bbox-x86-64 defconfig
 sudo sed -i 's/# CONFIG_STATIC is not set/CONFIG_STATIC=y/' $RFSBUILD/bbox-x86-64/.config
-#make O=$RFSBUILD/bbox-x86-64 menuconfig
 cd $RFSBUILD/bbox-x86-64
 make -j $(nproc)
 make install
