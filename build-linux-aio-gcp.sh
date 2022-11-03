@@ -7,7 +7,7 @@ sudo apt update -y
 sudo apt install wget htop qemu-system libvirt-clients libvirt-daemon-system virt-manager vim  -y
 sudo apt-get install build-essential libncurses5-dev libssl-dev libelf-dev bison flex bc kmod cpio dwarves -y
 
-cat - > /root/build-linux-vars.sh <<'VAR_BLOCK'
+cat - > /root/build-linux-vars <<'VAR_BLOCK'
 export LOCALREPODIR="/opt/LNXKNL-REPO"
 export LNXIMAGEOUT="/opt/netware-1-x86-64"
 export LNXKNLBUILD="LNXKNL-BUILD"
@@ -171,5 +171,6 @@ fi
 INITRAMFS_BLOCK
 
 chmod +x /root/*.sh
+source /root/build-linux-vars
 sh /root/build-linux-kernel.sh >> kernel.log 
 sh /root/build-linux-initramfs.sh >> iniramfs.log
