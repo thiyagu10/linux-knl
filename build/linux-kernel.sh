@@ -4,7 +4,6 @@
 #############################################################################################################
 
 export KNLBLDDIR=$HOME/$LNXKNLBUILD
-export KNLOUTDIR=$KNLBLDDIR/LNXKNL-TEMP
 export MAJOR_VER=$(echo $KNL_VER | cut -d. -f1)
 export LNXKNL_URL=https://cdn.kernel.org/pub/linux/kernel/v$MAJOR_VER.x/linux-$KNL_VER.tar.xz
 sudo apt update -y
@@ -25,7 +24,6 @@ else
         mkdir -pv $LNXIMAGEOUT
 fi
 mkdir -pv $KNLBLDDIR
-mkdir -pv $KNLOUTDIR
 cd $KNLBLDDIR
 if [ -f "$LOCALREPODIR/linux-${KNL_VER}.tar.xz" ]
 then
