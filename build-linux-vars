@@ -1,6 +1,0 @@
-export LOCALREPODIR="/opt/LNXKNL-REPO"
-export LNXIMAGEOUT="/opt/netware-1-x86-64"
-export LNXKNLBUILD="LNXKNL-BUILD"
-export KNL_VER="6.0.6"
-export IRAMFSBUILD="IRAMFS-BUILD"
-export BBOX_VER="1.34.1"
