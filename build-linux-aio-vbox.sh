@@ -171,7 +171,7 @@ fi
 #############################################################################################################
 INITRAMFS_BLOCK
 
-chmod +x /root/*.sh
+chmod +x ~/linux-knl/*.sh
 source /root/build-linux-vars
 sh /root/build-linux-kernel.sh >> kernel.log 
 sh /root/build-linux-initramfs.sh >> initramfs.log
